@@ -19,3 +19,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+
+// "firebase": "^8.3.2",
+//     "react-native-reanimated": "~2.2.0",
+//     "react-native-responsive-fontsize": "^0.5.0",
+//     "react-native-safe-area-context": "3.2.0",
+//     "react-native-screens": "^3.1.1",
+//     "react-navigation": "^4.4.4",
+//     "react-navigation-stack": "^2.10.4"
