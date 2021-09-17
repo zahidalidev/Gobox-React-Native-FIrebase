@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Gobox2",
-    "slug": "Gobox2",
+    "name": "Gobox",
+    "slug": "Gobox",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

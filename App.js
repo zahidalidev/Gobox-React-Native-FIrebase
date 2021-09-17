@@ -1,31 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import { LogBox } from "react-native";
+
+// screens
+import LoginScreen from "./app/screens/auth/Index"
+import HomeScreen from "./app/screens/HomeScreen"
+
+LogBox.ignoreAllLogs()
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator headerMode="none" initialRouteName="LoginScreen" >
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
-
-
-// "firebase": "^8.3.2",
-//     "react-native-reanimated": "~2.2.0",
-//     "react-native-responsive-fontsize": "^0.5.0",
-//     "react-native-safe-area-context": "3.2.0",
-//     "react-native-screens": "^3.1.1",
-//     "react-navigation": "^4.4.4",
-//     "react-navigation-stack": "^2.10.4"
