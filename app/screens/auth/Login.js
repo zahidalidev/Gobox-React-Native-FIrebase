@@ -70,8 +70,11 @@ function Login(props) {
         try {
             let res = await AsyncStorage.getItem('user');
             if (res) {
-                props.navigation.navigate('SplashScreen')
-                return;
+                res = JSON.parse(res);
+                if (res.role === "admin") {
+                    props.navigation.navigate('AdminScreen')
+                    return;
+                }
             }
             props.navigation.navigate('LoginScreen');
         } catch (error) {

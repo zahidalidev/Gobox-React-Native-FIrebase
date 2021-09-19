@@ -44,7 +44,7 @@ function SplashScreen(props) {
 
     return (
         <Screen style={{ backgroundColor: Colors.white }} >
-            <StatusBar backgroundColor={Colors.primary} barStyle="dark-content" />
+            <StatusBar backgroundColor={Colors.primary} barStyle="light-content" />
 
             <View style={{ flex: 1, width: "100%", justifyContent: 'space-evenly', alignItems: "center", height: "90%", backgroundColor: Colors.primary, borderBottomEndRadius: RFPercentage(2.5), borderBottomStartRadius: RFPercentage(2.5) }} >
                 <TouchableOpacity onPress={() => props.navigation.navigate("HomeScreen")} style={{ position: "absolute", top: RFPercentage(4), right: RFPercentage(4) }} >

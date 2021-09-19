@@ -7,6 +7,7 @@ import { LogBox } from "react-native";
 import LoginScreen from "./app/screens/auth/Index"
 import HomeScreen from "./app/screens/HomeScreen"
 import SplashScreen from "./app/screens/SplashScreen"
+import AdminScreen from "./app/screens/AdminScreen"
 
 LogBox.ignoreAllLogs()
 
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="AdminScreen" component={AdminScreen} />
       </Stack.Navigator>
     </NavigationContainer >
   );
