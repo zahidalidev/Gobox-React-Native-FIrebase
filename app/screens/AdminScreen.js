@@ -16,6 +16,7 @@ import Colors from '../config/Colors';
 //services
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { addProduct } from '../services/ProductServices';
+import LoadingModal from '../components/common/LoadingModal';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -24,10 +25,6 @@ function AdminScreen(props) {
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
     const [allCategories, setAllCategories] = useState([])
-
-    const [selectedRes, setDropRes] = useState('')
-    const [allRes, setAllRes] = useState([])
-
 
     const iconComponent = () => {
         return <MaterialCommunityIcons
@@ -131,9 +128,8 @@ function AdminScreen(props) {
         const price = foodFeils[1].value
         const description = foodFeils[2].value
         const category = selectedCategory;
-        const rest = selectedRes;
 
-        if (title === '' || price === '' || description === '' || category === '' || rest === '') {
+        if (title === '' || price === '' || description === '' || category === '') {
             alert("All fields are required")
             return;
         }
@@ -143,7 +139,6 @@ function AdminScreen(props) {
             price,
             category,
             description,
-            restaurant: rest
         }
 
         try {
@@ -167,113 +162,99 @@ function AdminScreen(props) {
         <>
             <StatusBar style="light" backgroundColor={Colors.primary} />
 
+            <LoadingModal show={activityIndic} />
+
             <Appbar.Header style={{ backgroundColor: Colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.BackAction color={Colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
+                <Appbar.BackAction color={Colors.white} onPress={() => props.navigation.navigate('HomeScreen')} />
                 <Appbar.Content color={Colors.white} title="Admin Panel" />
             </Appbar.Header>
 
             <View style={styles.container}>
-                {activityIndic
-                    ? <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
-                        <ActivityIndicator color={Colors.primary} size={RFPercentage(6)} />
-                    </View>
-                    : <>
-                        {/* Bottom Contaienr */}
-                        <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
 
-                            {/* buttons */}
-                            <View style={{ flexDirection: 'column', marginTop: RFPercentage(1), backgroundColor: Colors.primary }} >
-                                <View style={{ width: "90%", flexDirection: "row" }} >
-                                    <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondary : null }} >
-                                        <Text numberOfLines={1} style={{ color: Colors.white, fontSize: RFPercentage(2) }} >Product</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondary : null }} >
-                                        <Text numberOfLines={1} style={{ color: Colors.white, fontSize: RFPercentage(2) }} >Category</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+                {/* Bottom Contaienr */}
+                <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
 
-                            {
-                                activeComponent === 'product' ?
-                                    <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
-                                        {/* Text feilds */}
-                                        {foodFeils.map((item, i) =>
-                                            <View key={i} style={{ marginTop: i == 0 ? RFPercentage(6) : RFPercentage(4), width: "85%" }} >
-                                                <AppTextInput
-                                                    placeHolder={item.placeHolder}
-                                                    width="100%"
-                                                    value={item.value}
-                                                    onChange={(text) => handleChangeProduct(text, item.id)}
-                                                    secure={item.secure}
-                                                />
-                                            </View>
-                                        )}
-
-                                        <ReactNativeCrossPicker
-                                            modalTextStyle={{ color: "rgb(0, 74, 173)" }}
-                                            mainComponentStyle={{ marginTop: RFPercentage(4), width: "85%", borderWidth: 0, backgroundColor: Colors.white }}
-                                            iconComponent={iconComponent}
-                                            items={allCategories}
-                                            setItem={setDropCategory} selectedItem={selectedCategory}
-                                            placeholder="Select Category"
-                                            modalMarginTop={"70%"} // popup model margin from the top 
-                                        />
-
-                                        <ReactNativeCrossPicker
-                                            modalTextStyle={{ color: "rgb(0, 74, 173)" }}
-                                            mainComponentStyle={{ marginTop: RFPercentage(4), width: "85%", borderWidth: 0, backgroundColor: Colors.white }}
-                                            iconComponent={iconComponent}
-                                            items={allRes}
-                                            setItem={setDropRes} selectedItem={selectedRes}
-                                            placeholder="Select Resturant"
-                                            modalMarginTop={"90%"} // popup model margin from the top 
-                                        />
-
-                                        {/* Add Item Button */}
-                                        <View style={{ marginTop: RFPercentage(10), width: "85%", flex: 1, alignItems: "flex-end" }} >
-                                            <AppTextButton
-                                                name="Add Item"
-                                                borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleProduct()}
-                                                backgroundColor={Colors.primary}
-                                                width="100%"
-                                                height={RFPercentage(5.5)}
-                                            />
-                                        </View>
-
-                                    </View> : null
-                            }
-                            {
-                                activeComponent === 'category' ?
-                                    <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
-                                        {/* Text feilds */}
-                                        <View style={{ marginTop: RFPercentage(6), width: "85%" }} >
-                                            <AppTextInput
-                                                placeHolder="Category Title"
-                                                width="100%"
-                                                value={category}
-                                                onChange={(text) => setCategory(text)}
-                                            />
-                                        </View>
-
-                                        {/* Add Item Button */}
-                                        <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
-                                            <AppTextButton
-                                                name="Add Category"
-                                                borderRadius={RFPercentage(1.3)}
-                                                onSubmit={() => handleCategory()}
-                                                backgroundColor={Colors.primary}
-                                                width="100%"
-                                                height={RFPercentage(5.5)}
-                                            />
-                                        </View>
-
-                                    </View> : null
-                            }
+                    {/* buttons */}
+                    <View style={{ flexDirection: 'column', marginTop: RFPercentage(1), backgroundColor: Colors.primary }} >
+                        <View style={{ width: "90%", flexDirection: "row" }} >
+                            <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "40%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondary : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.4) }} >Product</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "40%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondary : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.4) }} >Category</Text>
+                            </TouchableOpacity>
                         </View>
+                    </View>
 
-                    </>
-                }
+                    {
+                        activeComponent === 'product' ?
+                            <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
+                                {/* Text feilds */}
+                                {foodFeils.map((item, i) =>
+                                    <View key={i} style={{ marginTop: i == 0 ? RFPercentage(6) : RFPercentage(4), width: "85%" }} >
+                                        <AppTextInput
+                                            placeHolder={item.placeHolder}
+                                            width="100%"
+                                            value={item.value}
+                                            onChange={(text) => handleChangeProduct(text, item.id)}
+                                            secure={item.secure}
+                                        />
+                                    </View>
+                                )}
+
+                                <ReactNativeCrossPicker
+                                    modalTextStyle={{ color: "rgb(0, 74, 173)" }}
+                                    mainComponentStyle={{ marginTop: RFPercentage(4), width: "85%", borderWidth: 0, backgroundColor: Colors.white }}
+                                    iconComponent={iconComponent}
+                                    items={allCategories}
+                                    setItem={setDropCategory} selectedItem={selectedCategory}
+                                    placeholder="Select Category"
+                                    modalMarginTop={"70%"} // popup model margin from the top 
+                                />
+
+                                {/* Add Item Button */}
+                                <View style={{ marginTop: RFPercentage(10), width: "85%", flex: 1, alignItems: "flex-end" }} >
+                                    <AppTextButton
+                                        name="Add Item"
+                                        borderRadius={RFPercentage(1.3)}
+                                        onSubmit={() => handleProduct()}
+                                        backgroundColor={Colors.primary}
+                                        width="100%"
+                                        height={RFPercentage(5.5)}
+                                    />
+                                </View>
+
+                            </View> : null
+                    }
+                    {
+                        activeComponent === 'category' ?
+                            <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
+                                {/* Text feilds */}
+                                <View style={{ marginTop: RFPercentage(6), width: "85%" }} >
+                                    <AppTextInput
+                                        placeHolder="Category Title"
+                                        width="100%"
+                                        value={category}
+                                        onChange={(text) => setCategory(text)}
+                                    />
+                                </View>
+
+                                {/* Add Item Button */}
+                                <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
+                                    <AppTextButton
+                                        name="Add Category"
+                                        borderRadius={RFPercentage(1.3)}
+                                        onSubmit={() => handleCategory()}
+                                        backgroundColor={Colors.primary}
+                                        width="100%"
+                                        height={RFPercentage(5.5)}
+                                    />
+                                </View>
+
+                            </View> : null
+                    }
+                </View>
+
             </View>
         </>
     );

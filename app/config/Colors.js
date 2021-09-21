@@ -9,7 +9,7 @@ const Colors = {
     light: "#f8f4f4",
     dark: "#0c0c0c",
     danger: "#ff5252",
-    lightGrey: "rgba(184, 185, 187, 0.10)",
+    lightGrey: "rgba(184, 185, 187, 0.01)",
     mediumGrey: "rgba(107, 110, 115, 0.40)",
     grey: "#808080",
     danger: "#d62f2f"
