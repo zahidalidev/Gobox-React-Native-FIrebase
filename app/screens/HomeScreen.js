@@ -111,7 +111,7 @@ function HomeScreen(props) {
         let tempProducts = [...allProducts];
         const filterProducts = tempProducts.filter(item => item.category == label);
         try {
-            props.navigation.navigate('productScreen', { filterProducts: filterProducts })
+            props.navigation.navigate('ProductScreen', { filterProducts: filterProducts })
         } catch (error) {
             console.log("Handle Product Category Error: ", error)
         }
@@ -124,6 +124,7 @@ function HomeScreen(props) {
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.Action color={colors.white} icon="home" />
                 <Appbar.Content color={colors.white} title="Home" />
+                <Appbar.Action onPress={() => props.navigation.navigate("HomeScreen")} color={colors.white} icon="account" />
                 <Appbar.Action onPress={() => handleLogout()} color={colors.white} icon="import" />
             </Appbar.Header>
 

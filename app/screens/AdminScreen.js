@@ -131,6 +131,7 @@ function AdminScreen(props) {
 
         if (title === '' || price === '' || description === '' || category === '') {
             alert("All fields are required")
+            setActivityIndic(false)
             return;
         }
 
@@ -147,6 +148,7 @@ function AdminScreen(props) {
                 console.log("product added erro: ", res)
 
                 alert("Product Not Added");
+                setActivityIndic(false)
                 return;
             }
 

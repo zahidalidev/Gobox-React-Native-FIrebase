@@ -8,6 +8,7 @@ import LoginScreen from "./app/screens/auth/Index"
 import HomeScreen from "./app/screens/HomeScreen"
 import SplashScreen from "./app/screens/SplashScreen"
 import AdminScreen from "./app/screens/AdminScreen"
+import ProductScreen from "./app/screens/ProductScreen"
 
 LogBox.ignoreAllLogs()
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="AdminScreen" component={AdminScreen} />
+        <Stack.Screen name="ProductScreen" component={ProductScreen} />
       </Stack.Navigator>
     </NavigationContainer >
   );
