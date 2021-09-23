@@ -63,7 +63,7 @@ function ProductScreen(props) {
         <>
             <StatusBar style="light" backgroundColor={colors.primary} />
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
-                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
+                <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('HomeScreen')} />
                 <Appbar.Content color={colors.white} title="Order Food You Love" />
             </Appbar.Header>
 
