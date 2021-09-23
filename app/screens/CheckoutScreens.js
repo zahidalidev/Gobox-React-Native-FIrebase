@@ -58,6 +58,12 @@ function CheckoutScreens(props) {
             let res = await AsyncStorage.getItem('user');
             res = JSON.parse(res);
 
+            if (number === '' || address === '') {
+                alert("Please fill all the feilds");
+                setIndicator(false);
+                return;
+            }
+
             let orderObj = {
                 title: product.title,
                 price: product.price,

@@ -149,7 +149,7 @@ function AdminScreen(props) {
         try {
             const res = await addProduct(body)
             if (!res) {
-                console.log("product added erro: ", res)
+                console.log("product addition error: ", res)
 
                 alert("Product Not Added");
                 setActivityIndic(false)

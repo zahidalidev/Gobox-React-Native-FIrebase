@@ -27,6 +27,7 @@ function ProductScreen(props) {
         try {
             if (props.route.params.filterProducts) {
                 setProducts(props.route.params.filterProducts)
+                console.log("props.route.params.filterProducts: ", props.route.params.filterProducts)
                 setOldProducts(props.route.params.filterProducts)
             }
         } catch (error) {
@@ -100,7 +101,6 @@ function ProductScreen(props) {
                             />}
                         style={{ marginTop: RFPercentage(3) }}
                         showsVerticalScrollIndicator={false}
-                        numColumns={2}
                         data={products.length === 0 ? [{ blank: true }] : products}
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({ item, index }) =>

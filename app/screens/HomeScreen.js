@@ -39,12 +39,16 @@ function HomeScreen(props) {
             setActivityIndic(true)
             let productRef = await getProductRef();
 
-            const observer = productRef.onSnapshot(querySnapshot => {
+            productRef.onSnapshot(querySnapshot => {
                 querySnapshot.docChanges().forEach(async (change) => {
                     let productRes = await getProducts();
                     setAllProducts(productRes)
+                    console.log("productRes: ", productRes.length)
                 });
             });
+
+            // await handleProductCategory();
+
         } catch (error) {
             console.log("Products found: ", error)
         }
@@ -110,6 +114,7 @@ function HomeScreen(props) {
     const handleProductCategory = (label) => {
         let tempProducts = [...allProducts];
         const filterProducts = tempProducts.filter(item => item.category == label);
+        // console.log("filterProducts: ", filterProducts)
         try {
             props.navigation.navigate('ProductScreen', { filterProducts: filterProducts })
         } catch (error) {
