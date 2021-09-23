@@ -8,6 +8,7 @@ import { Appbar } from 'react-native-paper';
 import colors from '../config/Colors';
 import ProductCard from '../components/ProductCard';
 import AppTextInput from '../components/common/AppTextInput';
+import LoadingModal from '../components/common/LoadingModal';
 
 
 function ProductScreen(props) {
@@ -51,68 +52,70 @@ function ProductScreen(props) {
                 <Appbar.BackAction color={colors.white} onPress={() => props.navigation.navigate('homeScreen')} />
                 <Appbar.Content color={colors.white} title="Order Food You Love" />
             </Appbar.Header>
+
+            <LoadingModal show={activityIndic} />
+
             <View style={styles.container}>
-                {activityIndic
-                    ? <View style={{ flexDirection: 'column', marginTop: -RFPercentage(7), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.lightGrey, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
-                        <ActivityIndicator color={colors.primary} size={RFPercentage(6)} />
-                    </View>
-                    : <>
-                        {/* Bottom Contaienr */}
-                        <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.white, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
+                {/* Bottom Contaienr */}
+                <View style={{ flexDirection: 'column', marginTop: RFPercentage(2), borderTopLeftRadius: RFPercentage(8), backgroundColor: colors.white, width: "100%", flex: 1.8, alignItems: 'center', justifyContent: 'center' }} >
 
-                            {/* Search feilds */}
-                            <View style={{ flexDirection: 'column', marginTop: RFPercentage(1) }} >
-                                <View style={{ width: "90%" }} >
-                                    <AppTextInput
-                                        autoFocus={true}
-                                        placeHolder="Search for food"
-                                        width="100%"
-                                        value={searchValue}
-                                        onChange={(text) => setSearchValue(text)}
-                                        rightIcon="magnify"
-                                        rightFunction={() => handleSearch()}
-                                        elevation={1}
-                                        borderWidth={0.4}
-                                        height={RFPercentage(6.51)}
-                                    />
-                                </View>
-                            </View>
-
-                            {/* Products */}
-                            <FlatList
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={refreshing}
-                                        onRefresh={onRefresh}
-                                    />}
-                                style={{ marginTop: RFPercentage(3) }}
-                                showsVerticalScrollIndicator={false}
-                                numColumns={2}
-                                data={products.length === 0 ? [{ blank: true }] : products}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item, index }) =>
-                                    <TouchableOpacity onPress={() => props.navigation.navigate('productDetailsScreen', { item: item })} activeOpacity={0.9} style={{
-                                        margin: RFPercentage(1),
-                                        marginRight: RFPercentage(2),
-                                        marginBottom: 0,
-                                        backgroundColor: "white",
-                                        maxHeight: item.blank ? 0 : null,
-                                        width: RFPercentage(21), height: RFPercentage(21),
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexDirection: "column",
-                                    }} >
-                                        {item.blank ? null :
-                                            <ProductCard index={index} price={item.price} title={item.title} description={item.description} />
-                                        }
-                                    </TouchableOpacity>
-                                }
+                    {/* Search feilds */}
+                    <View style={{ flexDirection: 'column', marginTop: RFPercentage(1) }} >
+                        <View style={{ width: "90%" }} >
+                            <AppTextInput
+                                autoFocus={true}
+                                placeHolder="Search for food"
+                                width="85%"
+                                value={searchValue}
+                                onChange={(text) => setSearchValue(text)}
+                                rightIcon="magnify"
+                                rightFunction={() => handleSearch()}
+                                elevation={1}
+                                borderWidth={0.4}
+                                height={RFPercentage(6.51)}
                             />
-
                         </View>
+                    </View>
 
-                    </>
-                }
+                    {/* Products */}
+                    <FlatList
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />}
+                        style={{ marginTop: RFPercentage(3) }}
+                        showsVerticalScrollIndicator={false}
+                        numColumns={2}
+                        data={products.length === 0 ? [{ blank: true }] : products}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) =>
+                            <TouchableOpacity onPress={() => props.navigation.navigate('productDetailsScreen', { item: item })} activeOpacity={0.9} style={{
+                                margin: RFPercentage(1),
+                                backgroundColor: "white",
+                                maxHeight: item.blank ? 0 : null,
+                                width: "87%",
+                                borderRadius: 8,
+                                marginLeft: "6%",
+                                alignItems: "center",
+                                flexDirection: "column",
+                                shadowColor: "#000",
+                                shadowOffset: {
+                                    width: 0,
+                                    height: 2,
+                                },
+                                shadowOpacity: 0.25,
+                                shadowRadius: 3.84,
+                                elevation: 5,
+                            }} >
+                                {item.blank ? null :
+                                    <ProductCard index={index} price={item.price} title={item.title} description={item.description} />
+                                }
+                            </TouchableOpacity>
+                        }
+                    />
+
+                </View>
             </View>
         </>
     );
