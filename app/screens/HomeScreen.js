@@ -123,8 +123,10 @@ function HomeScreen(props) {
 
             <Appbar.Header style={{ backgroundColor: colors.primary, width: "100%", justifyContent: "space-between" }} >
                 <Appbar.Action color={colors.white} icon="home" />
-                <Appbar.Content color={colors.white} title="Home" />
-                <Appbar.Action onPress={() => props.navigation.navigate("HomeScreen")} color={colors.white} icon="account" />
+                <Appbar.Content color={colors.white} title="Gobox" />
+                {
+                    currentUser.role === 'admin' ? <Appbar.Action onPress={() => props.navigation.navigate("AdminScreen")} color={colors.white} icon="account" /> : null
+                }
                 <Appbar.Action onPress={() => handleLogout()} color={colors.white} icon="import" />
             </Appbar.Header>
 
