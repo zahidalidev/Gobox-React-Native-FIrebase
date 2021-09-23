@@ -309,7 +309,7 @@ function AdminScreen(props) {
                                             elevation: 5,
                                         }} >
                                             {item.blank ? null :
-                                                <ProductCard order={true} name={item.name} address={item.address} index={index} price={item.price} title={item.title} description={item.description} />
+                                                <ProductCard order={true} number={item.number} totalPrice={item.totalPrice} name={item.name} address={item.address} index={index} price={item.price} title={item.title} description={item.description} />
                                             }
                                         </TouchableOpacity>
                                     }

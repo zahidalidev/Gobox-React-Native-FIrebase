@@ -23,6 +23,7 @@ function CheckoutScreens(props) {
     const [product, setProduct] = useState({})
     const [user, setUser] = useState({})
     const [address, setAddress] = useState('')
+    const [number, setNumber] = useState('')
     const [indicator, setIndicator] = useState(false)
 
     const getProduct = async () => {
@@ -61,10 +62,11 @@ function CheckoutScreens(props) {
                 title: product.title,
                 price: product.price,
                 description: product.description,
-                email: res.email ? res.email : '',
-                address: address,
+                email: res.email,
                 totalPrice: product.price,
-                name: res.name ? res.name : '',
+                name: res.name,
+                address,
+                number,
             }
 
             await orderCart(orderObj);
@@ -134,9 +136,23 @@ function CheckoutScreens(props) {
                         <AppTextInput
                             borderWidth={0.8}
                             placeHolder={"Address"}
+                            height={RFPercentage(5.5)}
                             width="70%"
                             value={address}
                             onChange={(text) => setAddress(text)}
+                        />
+                    </View>
+                    <View style={{ alignItems: "center", marginTop: RFPercentage(2), width: "80%", justifyContent: "space-between", flexDirection: "row" }} >
+                        <Text style={{ width: "30%", marginTop: RFPercentage(0.5), color: colors.black, fontSize: RFPercentage(2.8) }} >
+                            Contact Number
+                        </Text>
+                        <AppTextInput
+                            borderWidth={0.8}
+                            height={RFPercentage(5.5)}
+                            placeHolder={"Contact Number"}
+                            width="70%"
+                            value={number}
+                            onChange={(text) => setNumber(text)}
                         />
                     </View>
 
