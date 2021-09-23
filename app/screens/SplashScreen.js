@@ -38,7 +38,7 @@ function SplashScreen(props) {
         if (currentSplashIndex < 2) {
             setCurrentSplashIndex(currentSplashIndex + 1);
         } else {
-            props.navigation.navigate("LoginScreen")
+            props.navigation.navigate("HomeScreen")
         }
     }
 

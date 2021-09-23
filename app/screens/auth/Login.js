@@ -74,7 +74,11 @@ function Login(props) {
                 if (res.role === "admin") {
                     props.navigation.navigate('AdminScreen')
                     return;
+                } else {
+                    props.navigation.navigate('HomeScreen')
+                    return;
                 }
+
             }
             props.navigation.navigate('LoginScreen');
         } catch (error) {
