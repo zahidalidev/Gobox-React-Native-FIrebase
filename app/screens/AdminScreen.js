@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text, ActivityIndicator, StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
@@ -17,6 +17,8 @@ import Colors from '../config/Colors';
 import { addCategory, getCategories } from '../services/CategoryServices';
 import { addProduct } from '../services/ProductServices';
 import LoadingModal from '../components/common/LoadingModal';
+import { getAllNewOrders, getOrderRef } from '../services/OrderServices';
+import ProductCard from '../components/ProductCard';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
@@ -25,6 +27,7 @@ function AdminScreen(props) {
     const [category, setCategory] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
     const [allCategories, setAllCategories] = useState([])
+    const [allOrders, setAllOrders] = useState([])
 
     const iconComponent = () => {
         return <MaterialCommunityIcons
@@ -94,6 +97,7 @@ function AdminScreen(props) {
 
     useEffect(() => {
         getAllCategories()
+        getAllOrders()
     }, [])
 
     const handleCategory = async () => {
@@ -160,6 +164,23 @@ function AdminScreen(props) {
         setActivityIndic(false)
     }
 
+    const getAllOrders = async () => {
+        try {
+            setActivityIndic(true)
+            let productRef = await getOrderRef();
+
+            productRef.onSnapshot(querySnapshot => {
+                querySnapshot.docChanges().forEach(async (change) => {
+                    let productRes = await getAllNewOrders();
+                    setAllOrders(productRes)
+                });
+            });
+        } catch (error) {
+            console.log("Products found: ", error)
+        }
+        setActivityIndic(false);
+    }
+
     return (
         <>
             <StatusBar style="light" backgroundColor={Colors.primary} />
@@ -179,11 +200,14 @@ function AdminScreen(props) {
                     {/* buttons */}
                     <View style={{ flexDirection: 'column', marginTop: RFPercentage(1), backgroundColor: Colors.primary }} >
                         <View style={{ width: "90%", flexDirection: "row" }} >
-                            <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "40%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondary : null }} >
-                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.4) }} >Product</Text>
+                            <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondary : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Product</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "40%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondary : null }} >
-                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.4) }} >Category</Text>
+                            <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondary : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Category</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setActiveComponent('orders')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'orders' ? Colors.secondary : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Orders</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -252,6 +276,45 @@ function AdminScreen(props) {
                                         height={RFPercentage(5.5)}
                                     />
                                 </View>
+
+                            </View> : null
+                    }
+
+                    {
+                        activeComponent === 'orders' ?
+                            <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
+                                {/* Products */}
+                                <FlatList
+                                    style={{ marginTop: RFPercentage(3) }}
+                                    showsVerticalScrollIndicator={false}
+                                    data={allOrders}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item, index }) =>
+                                        <TouchableOpacity activeOpacity={1} style={{
+                                            margin: RFPercentage(1),
+                                            backgroundColor: "white",
+                                            maxHeight: item.blank ? 0 : null,
+                                            width: "90%",
+                                            marginLeft: "4%",
+                                            borderRadius: 8,
+                                            alignItems: "center",
+                                            flexDirection: "column",
+                                            shadowColor: "#000",
+                                            shadowOffset: {
+                                                width: 0,
+                                                height: 2,
+                                            },
+                                            shadowOpacity: 0.25,
+                                            shadowRadius: 3.84,
+                                            elevation: 5,
+                                        }} >
+                                            {item.blank ? null :
+                                                <ProductCard order={true} name={item.name} address={item.address} index={index} price={item.price} title={item.title} description={item.description} />
+                                            }
+                                        </TouchableOpacity>
+                                    }
+                                />
+
 
                             </View> : null
                     }
