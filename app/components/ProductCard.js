@@ -4,7 +4,7 @@ import { RFPercentage } from 'react-native-responsive-fontsize';
 
 import colors from '../config/Colors';
 
-function ProductCard({ index, title, description, price, order = false, name = "", address = "", number = '', totalPrice = '' }) {
+function ProductCard({ index, title, description, price, order = false, name = "", address = "", number = '', totalPrice = '', quantity = 1 }) {
     const backColors = [
         "#d50e64",
         "#85bfff",
@@ -13,8 +13,8 @@ function ProductCard({ index, title, description, price, order = false, name = "
     ]
 
     return (
-        <View key={index} style={{ flexDirection: "row", width: "100%", height: order ? RFPercentage(17) : RFPercentage(10) }} >
-            <View style={{ height: order ? RFPercentage(17) : RFPercentage(10), width: "30%", borderTopLeftRadius: 8, borderBottomLeftRadius: 8, backgroundColor: backColors[index % backColors.length], alignItems: "center", justifyContent: "center" }} >
+        <View key={index} style={{ flexDirection: "row", width: "100%", height: order ? RFPercentage(18) : RFPercentage(10) }} >
+            <View style={{ height: order ? RFPercentage(18) : RFPercentage(10), width: "30%", borderTopLeftRadius: 8, borderBottomLeftRadius: 8, backgroundColor: backColors[index % backColors.length], alignItems: "center", justifyContent: "center" }} >
                 <Text style={{ color: colors.white, fontSize: RFPercentage(2.2), fontWeight: "bold" }} >{title}</Text>
             </View>
             <View style={{ borderTopRightRadius: 8, borderBottomRightRadius: 8, width: "70%", borderWidth: 0.9, borderColor: backColors[index % backColors.length], justifyContent: "center", alignItems: "flex-start", paddingLeft: RFPercentage(1.5) }} >
@@ -29,6 +29,7 @@ function ProductCard({ index, title, description, price, order = false, name = "
                         <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(2.5) }} >Customer Name: {name}</Text>
                         <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(2.3) }} >{number}</Text>
                         <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(2.3) }} >{address}</Text>
+                        <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(2.3) }} >Quantity {quantity}</Text>
                         <Text numberOfLines={1} style={{ color: colors.grey, fontSize: RFPercentage(2.3), fontWeight: "bold" }} >Total {totalPrice}</Text>
                     </View> : null
                 }
