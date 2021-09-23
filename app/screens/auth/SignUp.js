@@ -9,12 +9,12 @@ import AppTextButton from "../../components/common/AppTextButton"
 import LoadingModal from "../../components/common/LoadingModal"
 
 // services
-import { AddUser } from "../../services/UserServices"
+import { AddUser, loginUser } from "../../services/UserServices"
 
 // config
 import Colors from '../../config/Colors';
 
-function SignUp({ onPressHandle }) {
+function SignUp(props) {
     const [indicator, showIndicator] = useState(false);
 
     const [feilds, setFeilds] = useState([
@@ -68,13 +68,36 @@ function SignUp({ onPressHandle }) {
             showIndicator(false)
 
             alert("Registration Successful!")
-            onPressHandle()
+            await handleLogin(email, password)
+            // onPressHandle()
             // props.navigation.navigate('LoginScreen')
 
         } catch (error) {
             console.log("login error: ", error);
             showIndicator(false)
             alert("Something went wrong!")
+        }
+    }
+
+    const handleLogin = async (email, password) => {
+        try {
+            showIndicator(true)
+
+            const res = await loginUser(email, password);
+            if (!res) {
+                showIndicator(false)
+                alert("Email or Password is incorrect")
+                return;
+            }
+            await AsyncStorage.setItem('user', JSON.stringify(res));
+            showIndicator(false)
+
+            props.navigation.navigate('SplashScreen')
+
+        } catch (error) {
+            console.log("login error: ", error);
+            showIndicator(false)
+            alert("Email or Password is incorrect")
         }
     }
 
