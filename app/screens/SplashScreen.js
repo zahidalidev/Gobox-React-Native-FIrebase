@@ -38,7 +38,7 @@ function SplashScreen(props) {
         if (currentSplashIndex < 2) {
             setCurrentSplashIndex(currentSplashIndex + 1);
         } else {
-            props.navigation.navigate("HomeScreen")
+            props.navigation.navigate("RestaurentsScreen")
         }
     }
 
@@ -53,9 +53,9 @@ function SplashScreen(props) {
                     </Text>
                 </TouchableOpacity>
 
-                <View style={{ height: "20%", width: "100%", justifyContent: 'center', alignItems: 'center', marginTop: RFPercentage(-5) }} >
+                <View style={{ height: "20%", width: "100%", justifyContent: 'center', alignItems: 'center' }} >
                     <View>
-                        <Image source={logo} />
+                        <Image style={{ width: RFPercentage(27), height: RFPercentage(27) }} source={logo} />
                     </View>
                 </View>
 

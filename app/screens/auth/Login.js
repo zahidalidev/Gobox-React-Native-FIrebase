@@ -55,7 +55,7 @@ function Login(props) {
             await AsyncStorage.setItem('user', JSON.stringify(res));
             showIndicator(false)
 
-            props.navigation.navigate('HomeScreen')
+            props.navigation.navigate('RestaurentsScreen')
 
         } catch (error) {
             console.log("login error: ", error);
@@ -75,7 +75,7 @@ function Login(props) {
                     props.navigation.navigate('AdminScreen')
                     return;
                 } else {
-                    props.navigation.navigate('HomeScreen')
+                    props.navigation.navigate('RestaurentsScreen')
                     return;
                 }
 

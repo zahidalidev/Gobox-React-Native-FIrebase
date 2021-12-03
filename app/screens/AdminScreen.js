@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, ActivityIndicator, StyleSheet, TouchableOpacity, View, FlatList } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, FlatList, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { RFPercentage } from 'react-native-responsive-fontsize';
 import { Appbar } from 'react-native-paper';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ReactNativeCrossPicker from "react-native-cross-picker"
+import * as ImagePicker from 'expo-image-picker';
 
 // components
 import AppTextInput from '../components/common/AppTextInput';
@@ -19,23 +20,20 @@ import { addProduct } from '../services/ProductServices';
 import LoadingModal from '../components/common/LoadingModal';
 import { getAllNewOrders, getOrderRef } from '../services/OrderServices';
 import ProductCard from '../components/ProductCard';
+import { addRestaurant } from '../services/RestaurantServices';
 
 function AdminScreen(props) {
     const [activityIndic, setActivityIndic] = useState(false);
     const [activeComponent, setActiveComponent] = useState('product');
 
     const [category, setCategory] = useState('');
+    const [restaurant, setRestaurant] = useState('');
     const [selectedCategory, setDropCategory] = useState('')
     const [allCategories, setAllCategories] = useState([])
     const [allOrders, setAllOrders] = useState([])
 
-    const iconComponent = () => {
-        return <MaterialCommunityIcons
-            name={"chevron-down"}
-            size={20}
-            color={"grey"}
-        />
-    }
+    const [imageSelected, setImageSelected] = useState(false);
+    const [image, setImage] = useState('');
 
     const [foodFeils, setFoodFields] = useState([
         {
@@ -55,6 +53,40 @@ function AdminScreen(props) {
         },
 
     ]);
+
+    const iconComponent = () => {
+        return <MaterialCommunityIcons
+            name={"chevron-down"}
+            size={20}
+            color={"grey"}
+        />
+    }
+
+    const uploadImages = async () => {
+        try {
+            console.log("im")
+            await ImagePicker.requestMediaLibraryPermissionsAsync();
+            let permissionResult = await ImagePicker.getMediaLibraryPermissionsAsync();
+
+            if (permissionResult.granted === false) {
+                alert("Permission to access camera roll is required!");
+                return;
+            }
+
+            let pickerResult = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                quality: 0.6
+            });
+
+
+            const { uri } = pickerResult;
+
+            setImage(uri)
+            setImageSelected(true)
+        } catch (error) {
+            console.log("Image error: ", error)
+        }
+    }
 
     const getAllCategories = async () => {
         setActivityIndic(true)
@@ -181,6 +213,25 @@ function AdminScreen(props) {
         setActivityIndic(false);
     }
 
+    const handleRestaurant = async () => {
+        setActivityIndic(true)
+        if (restaurant === '') {
+            alert("Add the Restaurant Name")
+            return;
+        }
+        try {
+            const res = await addRestaurant(restaurant, image)
+            if (res) {
+                alert("Restaurant Added")
+            } else {
+                alert("Something went wrong!")
+            }
+        } catch (error) {
+            console.log("Restaurant add: ", error)
+        }
+        setActivityIndic(false)
+    }
+
     return (
         <>
             <StatusBar style="light" backgroundColor={Colors.primary} />
@@ -200,14 +251,17 @@ function AdminScreen(props) {
                     {/* buttons */}
                     <View style={{ flexDirection: 'column', marginTop: RFPercentage(1), backgroundColor: Colors.primary }} >
                         <View style={{ width: "90%", flexDirection: "row" }} >
-                            <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondary : null }} >
-                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Product</Text>
+                            <TouchableOpacity onPress={() => setActiveComponent('product')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'product' ? Colors.secondaryLight : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(1.8) }} >Product</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondary : null }} >
-                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Category</Text>
+                            <TouchableOpacity onPress={() => setActiveComponent('category')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'category' ? Colors.secondaryLight : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(1.8) }} >Category</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setActiveComponent('orders')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "30%", padding: RFPercentage(2), backgroundColor: activeComponent === 'orders' ? Colors.secondary : null }} >
-                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(2.3) }} >Orders</Text>
+                            <TouchableOpacity onPress={() => setActiveComponent('orders')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'orders' ? Colors.secondaryLight : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(1.8) }} >Orders</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => setActiveComponent('restaurant')} activeOpacity={0.8} style={{ justifyContent: "center", alignItems: "center", width: "25%", padding: RFPercentage(2), backgroundColor: activeComponent === 'restaurant' ? Colors.secondaryLight : null }} >
+                                <Text numberOfLines={1} style={{ fontWeight: "bold", color: Colors.white, fontSize: RFPercentage(1.8) }} >Restaurant</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -315,6 +369,45 @@ function AdminScreen(props) {
                                     }
                                 />
 
+
+                            </View> : null
+                    }
+
+
+                    {
+                        activeComponent === 'restaurant' ?
+                            <View style={{ marginTop: RFPercentage(2), backgroundColor: Colors.lightGrey, width: "100%", flex: 1.8, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }} >
+                                <View style={{ justifyContent: "flex-start", alignItems: "center", flexDirection: "row", marginTop: RFPercentage(4), width: "85%", }} >
+                                    <TouchableOpacity onPress={() => uploadImages()} style={{ borderRadius: RFPercentage(1.3), backgroundColor: Colors.primary, width: "50%", height: RFPercentage(6), justifyContent: "center", alignItems: "center" }} >
+                                        <Text style={{ color: Colors.white, fontSize: RFPercentage(2.3) }} >Upload Image</Text>
+                                    </TouchableOpacity>
+                                    {imageSelected ?
+                                        <Image resizeMode="center" source={{ uri: image }} style={{ borderRadius: RFPercentage(2), width: RFPercentage(20), height: RFPercentage(13), marginLeft: RFPercentage(2), marginBottom: RFPercentage(1) }} />
+                                        : <Text style={{ marginLeft: RFPercentage(2), marginBottom: RFPercentage(1), color: Colors.danger, fontSize: RFPercentage(1.8) }} >* Image is Not Selected</Text>
+                                    }
+                                </View>
+
+                                {/* Text feilds */}
+                                <View style={{ marginTop: RFPercentage(6), width: "85%" }} >
+                                    <AppTextInput
+                                        placeHolder="Restaurant Name"
+                                        width="100%"
+                                        value={restaurant}
+                                        onChange={(text) => setRestaurant(text)}
+                                    />
+                                </View>
+
+                                {/* Add Item Button */}
+                                <View style={{ marginTop: RFPercentage(5), width: "85%", flex: 1, alignItems: "flex-end" }} >
+                                    <AppTextButton
+                                        name="Add Restaurant"
+                                        borderRadius={RFPercentage(1.3)}
+                                        onSubmit={() => handleRestaurant()}
+                                        backgroundColor={Colors.primary}
+                                        width="100%"
+                                        height={RFPercentage(5.5)}
+                                    />
+                                </View>
 
                             </View> : null
                     }
